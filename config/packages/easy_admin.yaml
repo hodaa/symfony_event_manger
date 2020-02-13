@@ -1,5 +1,28 @@
 easy_admin:
+    design:
+        # ...
+
+        # this is the default form theme used by backends
+#        form_theme: '@EasyAdmin/form/bootstrap_4.html.twig'
+
+        # you can use your own form theme
+#        form_theme: '@App/form/custom_layout.html.twig'
+
+        # you can also define an array of form themes to use all of them
+#        form_theme:
+#            - 'admin/form/custom_layout.html.twig'
+#            - 'form_div_layout.html.twig'
+#            - '@EasyAdmin/form/bootstrap_4.html.twig'
     entities:
+#        User:
+#              # ...
+#          list:
+#              # if the sort order is not specified, 'DESC' is used
+#              sort: 'createdAt'
+#          search:
+#              # use an array to also define the sorting direction
+#              sort: ['createdAt', 'ASC']
+#
 #        User:
 #            class: App\Entity\User
 #            form:
@@ -8,14 +31,20 @@ easy_admin:
 #                  - email
 #                  - enabled
 #                  - lastLogin
-#                  # if administrators are allowed to edit users' passwords and roles, add this:
+                  # if administrators are allowed to edit users' passwords and roles, add this:
 #                  - { property: 'plainPassword', type: 'text', type_options: { required: false } }
 #                  - { property: 'roles', type: 'choice', type_options: { multiple: true, choices: { 'ROLE_USER': 'ROLE_USER', 'ROLE_ADMIN': 'ROLE_ADMIN' } } }
 
         # List the entity class name you want to manage
         - App\Entity\Event
+#            list:
+#                # if the sort order is not specified, 'DESC' is used
+#                sort: 'createdAt'
+#                search:
+#                    # use an array to also define the sorting direction
+#                    sort: ['createdAt', 'ASC']
     site_name: 'Event Manger'
-    design:
-        menu:
-            # only users with the ROLE_SUPER_ADMIN role will see this menu item
-#            - { entity: 'Event', permission: 'ROLE_SUPER_ADMIN' }
+#    design:
+#        menu:
+#            # only users with the ROLE_SUPER_ADMIN role will see this menu item
+##            - { entity: 'Event', permission: 'ROLE_SUPER_ADMIN' }

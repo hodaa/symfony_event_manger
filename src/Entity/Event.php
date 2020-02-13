@@ -197,8 +197,8 @@ class Event
      */
     public function toArray()
     {
-        $types =  new EventTypes();
         return [
+            'id' => $this->id,
             'name' => $this->getName(),
             'location' => $this->getLocation(),
             'attendance' => $this->getAttendance(),

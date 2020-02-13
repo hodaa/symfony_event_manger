@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Event;
 use App\Repository\EventRepository;
 use App\Validations\EventValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,6 +15,7 @@ use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 class EventController extends AbstractController
 {
@@ -40,18 +42,33 @@ class EventController extends AbstractController
 
     /**
      * @Route("/api/v1/events", name="get_events" ,methods= "get" )
+     * @param Request $request
+     * @param PaginatorInterface $paginator
+     * @return JsonResponse
      */
-    public function index(): JsonResponse
+    public function index(Request $request, PaginatorInterface $paginator)
     {
         $events = $this->eventRepository->findAll();
-        $data = [];
+        $limit = $request->query->get('limit') ??  20;
+        $page = $request->query->getInt('page', 1);
 
-        foreach ($events as $event) {
-            $data[] = $event->toArray();
+        $pagination = $paginator->paginate(
+            $events, /* query NOT result */
+            $page, /*page number*/
+            $limit /*limit per page*/
+        );
+
+
+        foreach ($pagination->getItems() as $item) {
+            $data[] = $item->toArray();
         }
-
-        return new JsonResponse($data, Response::HTTP_OK);
+        $data['total'] = $pagination->getTotalItemCount();
+        $data['page'] = $pagination->getCurrentPageNumber();
+        return new JsonResponse(['data' => $data], Response::HTTP_OK);
     }
+
+
+
 
     /**
      * @Route("/api/v1/events", name="create_event" ,methods="POST")
@@ -95,31 +112,42 @@ class EventController extends AbstractController
             throw new NotFoundHttpException();
         }
 
-        return new JsonResponse(['data'=>$event->toArray()], Response::HTTP_OK);
+        return new JsonResponse(['data' => $event->toArray()], Response::HTTP_OK);
     }
 
     /**
      * @Route("/api/v1/events/{id}", name="update_event" ,methods="put")
      * @param $id
+     * @param Request $request
      * @return JsonResponse
      */
 
-    public function update($id): JsonResponse
+    public function update($id, Request $request): JsonResponse
     {
-        $event = $this->eventRepository->update($id);
+        $event = $this->eventRepository->findOneBy(['id' => $id]);
 
-        return new JsonResponse($event, Response::HTTP_OK);
+        if ($event === null) {
+            throw new NotFoundHttpException();
+        }
+        $data = $request->request->all();
+        $event = $this->eventRepository->updateEvent($event, $data);
+
+        return new JsonResponse(['data' => $event], Response::HTTP_OK);
     }
 
 
     /**
-     * @Route("/events/{id}", name="delete_event", methods={"DELETE"})
+     * @Route("api/v1/events/{id}", name="delete_event", methods="DELETE")
      * @param $id
      * @return JsonResponse
      */
     public function delete($id): JsonResponse
     {
         $event = $this->eventRepository->findOneBy(['id' => $id]);
+        if ($event === null) {
+            throw new NotFoundHttpException();
+        }
+
         $this->eventRepository->removeEvent($event);
 
         return new JsonResponse(['status' => 'Event deleted'], Response::HTTP_NO_CONTENT);

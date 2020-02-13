@@ -12,6 +12,17 @@ services:
       MYSQL_DATABASE: acid21
       MYSQL_ROOT_HOST: "%"
 
+  sqlite3:
+    image: nouchka/sqlite3:latest
+    container_name: sqlite3
+    stdin_open: true
+    tty: true
+    ports:
+      - 8080:8080
+    environment:
+      LIQUIBASE_DATABASE: test.db
+    volumes:
+      - ./db/:/root/db/
 
   php:
     build:
@@ -36,11 +47,17 @@ services:
       - php
 
 
-  adminer:
-    image: adminer
-    restart: on-failure
-    ports:
-      - 8080:8080
+#  adminer:
+#    image: adminer
+#    restart: on-failure
+#    ports:
+#      - 8080:8080
+
+#  composer:
+#    image: composer/composer:php7
+#    command: install
+#    volumes:
+#      - ./hoda:/usr/src/app
 
 #Volumes
 

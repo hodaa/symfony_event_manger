@@ -101,6 +101,10 @@ class User implements UserInterface
     {
         // not needed when using the "bcrypt" algorithm in security.yaml
     }
+    public function setUsername(string $username): void
+    {
+        $this->username = $username;
+    }
 
     /**
      * @see UserInterface

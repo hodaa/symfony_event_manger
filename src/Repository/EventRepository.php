@@ -6,6 +6,7 @@ use App\Entity\Event;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
+use OpenApiFixures\Customer;
 
 /**
  * @method Event|null find($id, $lockMode = null, $lockVersion = null)
@@ -48,34 +49,6 @@ class EventRepository extends ServiceEntityRepository
     }
 
 
-    // /**
-    //  * @return Event[] Returns an array of Event objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Event
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 
     /**
      * @param $id
@@ -90,22 +63,8 @@ class EventRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
 
-    }
 
-    /**
-     * @param $id
-     * @return Event|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-//    public function find($id): ?Event
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.id = :val')
-//            ->setParameter('val', $id)
-//            ->getQuery()
-//            ->getOneOrNullResult();
-//
-//    }
+    }
 
     /**
      * @param Event $event
@@ -117,11 +76,19 @@ class EventRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Customer $customer
-     * @return Customer
+     * @param Event $event
+     * @param $data
+     * @return Event
      */
-    public function updateCustomer(Event $event): Event
+    public function updateEvent(Event $event, $data): Event
     {
+        empty($data['name']) ? true  : $event->setName($data['name']);
+        empty($data['period']) ? true  : $event->setPeriod($data['name']);
+        empty($data['attendance']) ? true  : $event->setAttendance($data['attendance']);
+        empty($data['location']) ? true  : $event->setLocation($data['location']);
+        empty($data['type']) ? true  : $event->setType($data['type']);
+        empty($data['date']) ? true  : $event->setDate($data['date']);
+
         $this->manager->persist($event);
         $this->manager->flush();
 
