@@ -2,15 +2,13 @@
 
 namespace App\Validations;
 
-use PHPUnit\Framework\Constraint\LessThan;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\Date;
-use Symfony\Component\Validator\Constraints\EqualTo;
-use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\LessThanOrEqual;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Optional;
+use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\Validation;
 
 class EventValidator
@@ -48,7 +46,10 @@ class EventValidator
             'name' => [new NotBlank()],
             'attendance' => [new Optional(new NotBlank())],
             'location' => [new Optional()],
-            'type' => [new EqualTo(1)],
+            'type' => [new Range([
+                'min' => 0,
+                'max' => 1,
+                ])],
             'date' => [new NotBlank(),new Date()],
             'period' => [new NotBlank(),new LessThanOrEqual(60)],
 
