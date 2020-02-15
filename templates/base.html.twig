@@ -11,11 +11,14 @@
     </head>
     <body>
         {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}{{ encore_entry_script_tags('app') }}{% endblock %}
         {% block head_css %}
             <!-- Copy CSS from https://getbootstrap.com/docs/4.1/getting-started/introduction/#css -->
         {% endblock %}
         {% block head_js %}
+            <div id="app">
+                <app></app>
+            </div>
             <!-- Copy JavaScript from https://getbootstrap.com/docs/4.1/getting-started/introduction/#js -->
         {% endblock %}
     </body>

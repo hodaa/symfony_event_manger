@@ -11,12 +11,19 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Optional;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\Validator\Constraints\Collection;
+use Symfony\Component\Validator\Exception\ValidatorException;
 
+/**
+ * Class EventController
+ * @package App\Controller
+ */
 class EventController extends AbstractController
 {
     /**
@@ -38,6 +45,14 @@ class EventController extends AbstractController
     {
         $this->eventRepository = $eventRepository;
         $this->eventValidator = $eventValidator;
+    }
+
+    /**
+     * @Route("/", name="home" ,methods= "get" )
+     */
+    public function Home()
+    {
+        return $this->render('event/index.html.twig');
     }
 
     /**
@@ -77,6 +92,13 @@ class EventController extends AbstractController
      */
     public function store(Request $request): JsonResponse
     {
+        $violations = $this->eventValidator->validateRequest($request);
+        if (count($violations) > 0) {
+            return new JsonResponse(['status' => 'fail',
+                'validations' => $violations], Response::HTTP_BAD_REQUEST);
+
+        }
+
         $violations = $this->eventValidator->validate($request);
         if (!empty($violations)) {
             return new JsonResponse(
@@ -96,6 +118,19 @@ class EventController extends AbstractController
             );
 
         return new JsonResponse(['status' => 'Event created!'], Response::HTTP_CREATED);
+    }
+
+    /**
+     * @param $value
+     * @param $constraints
+     */
+    protected function validate($value, $constraints)
+    {
+        $validator = Validation::createValidator();
+        $violations = $validator->validate($value, $constraints);
+        return  $violations;
+
+
     }
 
     /**

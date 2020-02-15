@@ -5,3 +5,16 @@ easy_admin:
     - AppBundle\Entity\Product
     - AppBundle\Entity\Category
     - AppBundle\Entity\User
+dbal:
+  driver:   %database_driver%
+  host:     %database_host%
+  port:     %database_port%
+  dbname:   %database_name%
+  user:     %database_user%
+  password: %database_password%
+  charset:  UTF8
+  types:
+    tsvector:
+      class: myProject\myBundle\Type\tsvectorType
+  mapping_types:
+    tsvector: tsvector

@@ -22,7 +22,7 @@ class Event
 
     /**
      * @ORM\Column(type="string", length=255)
-     *  @Assert\NotBlank
+     * @Assert\NotBlank
      *
      */
     private $name;
@@ -105,25 +105,6 @@ class Event
         return $this->period;
     }
 
-    /**
-     * @return string|null
-     */
-//    public function getType(): ?string
-//    {
-//        return $this->type;
-//    }
-
-
-//    /**
-//     * @param int $type
-//     * @return $this
-//     */
-//    public function setType(int $type): self
-//    {
-//        $this->type = $type;
-//
-//        return $this;
-//    }
 
     /**
      * @param string $name
@@ -165,7 +146,7 @@ class Event
         return $this;
     }
 
-    public function setType(string $type): self
+    public function setType(int $type): self
     {
         $this->type = $type;
 
@@ -206,7 +187,7 @@ class Event
             'type' => $this->getTypeLabel($this->type),
         ];
     }
-    public function getType(): string
+    public function getType(): ?string
     {
         return $this->type;
     }
