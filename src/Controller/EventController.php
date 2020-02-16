@@ -117,20 +117,18 @@ class EventController extends AbstractController
             $request->get('type')
             );
 
-        return new JsonResponse(['status' => 'Event created!'], Response::HTTP_CREATED);
+        return new JsonResponse(['status' => 'success','message' => "Event created"], Response::HTTP_CREATED);
     }
 
     /**
      * @param $value
      * @param $constraints
+     * @return \Symfony\Component\Validator\ConstraintViolationListInterface
      */
     protected function validate($value, $constraints)
     {
         $validator = Validation::createValidator();
-        $violations = $validator->validate($value, $constraints);
-        return  $violations;
-
-
+        return $validator->validate($value, $constraints);
     }
 
     /**

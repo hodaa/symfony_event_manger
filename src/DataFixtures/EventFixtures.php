@@ -18,6 +18,7 @@ class EventFixtures extends Fixture
         $event->setPeriod(30);
         $event->setType(1);
         $event->setAttendance(1);
+        $event->setlocation("Egypt");
         $event->setDate('2020-03-01');
 
         $manager->persist($event);

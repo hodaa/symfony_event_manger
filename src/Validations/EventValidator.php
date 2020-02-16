@@ -43,19 +43,20 @@ class EventValidator
     public function validateRequest(Request $request): array
     {
         $constraints = new Collection([
-            'name' => [new NotBlank()],
+            'name' => [new NotBlank(['message' => "Name should not be blank"])],
             'attendance' => [new Optional(new NotBlank())],
             'location' => [new Optional()],
             'type' => [new Range([
                 'min' => 0,
                 'max' => 1,
                 ])],
-            'date' => [new NotBlank(),new Date()],
+            'date' => [new NotBlank(),new Date(['message' => "Date is not a valid date"])],
             'period' => [new NotBlank(),new LessThanOrEqual(60)],
 
         ]);
         $validator = Validation::createValidator();
         $violations = $validator->validate($request->request->all(), $constraints);
+
         $validationMessages = [];
         foreach ($violations as $validation) {
             $validationMessages[] = $validation->getMessage();
