@@ -12,16 +12,23 @@ docker-compose exec php bin/console doctrine:fixtures:load
 
 ```
  
-##usage
 
 ## Dashboard
 ```
 http://localhost/admin
+
+Email:hoda.hussin@gmail
+Password :123456
+
+```
+
+##  APi Collection
+```
+https://www.getpostman.com/collections/b33a43f32a43e683a603
 ```
 
 ## Test
 ```
 docker-compose exec php  bin/phpunit
-
 ```
 
